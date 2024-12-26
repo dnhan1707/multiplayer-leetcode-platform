@@ -1,0 +1,8 @@
+node_modules/
+
+.env*
+
+# exclude .env.example from gitignore as it's an example
+!.env.example
+
+logs/
