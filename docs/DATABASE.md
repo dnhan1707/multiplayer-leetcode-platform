@@ -1,5 +1,14 @@
 # Database
 
+## Instructions
+
+- Initialize the databse
+
+```bash
+npx sequelize-cli db:create
+npx sequelize-cli db:migrate
+```
+
 ## Overview
 
 - Users
@@ -23,6 +32,7 @@ Stores information about registered users.
 - `email` (VARCHAR(255), Unique): User's email address
 - `password` (VARCHAR(255)): Hashed password
 - `created_at` (TIMESTAMP): Account creation timestamp
+- `updated_at`(TIMESTAMP): Account updating timestamp
 
 **Relationships:**
 

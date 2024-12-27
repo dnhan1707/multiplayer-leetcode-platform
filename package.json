@@ -16,14 +16,19 @@
     "@types/cors": "^2.8.17",
     "cors": "^2.8.5",
     "express": "^4.21.2",
+    "pg": "^8.13.1",
+    "sequelize": "^6.37.5",
+    "sequelize-typescript": "^2.1.6",
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.2",
+    "@types/sequelize": "^4.28.20",
     "eslint": "^9.17.0",
     "globals": "^15.14.0",
+    "sequelize-cli": "^6.6.2",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.2"
