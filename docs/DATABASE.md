@@ -39,6 +39,7 @@ Represents a competition room where players compete.
 
 - `room_id` (UUID, PK): Unique identifier for the room
 - `room_code` (VARCHAR(10), Unique): Shareable code for joining the room
+- `room_link` (VARCHAR(10), Unique): Room link for joining (via Socket.io)
 - `created_by` (UUID, FK): Reference to the user who created the room
 - `status` (ENUM): Current room status ('active', 'completed', 'cancelled')
 - `max_players` (INTEGER): Maximum number of players allowed
