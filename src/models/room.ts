@@ -1,4 +1,4 @@
-import { Table, Column, Model, DataType, AllowNull, Unique, ForeignKey, BelongsTo } from "sequelize-typescript";
+import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from "sequelize-typescript";
 import { User } from "./user";
 
 @Table({
@@ -7,8 +7,6 @@ import { User } from "./user";
     createdAt: "created_at",
     updatedAt: false,
 })
-
-
 export class Room extends Model {
     @Column({
         type: DataType.UUID,
@@ -19,8 +17,8 @@ export class Room extends Model {
     declare id: string;
 
     @Column({
-        type: DataType.STRING(10),
-        defaultValue: DataType.UUIDV4,
+        type: DataType.STRING(50),
+        defaultValue: "testRoomCode",
         allowNull: false,
         unique: true,
         field: "room_code",
@@ -36,7 +34,6 @@ export class Room extends Model {
     })
     declare created_by: string;
 
-
     @BelongsTo(() => User)
     declare user: User;
 
@@ -49,6 +46,7 @@ export class Room extends Model {
 
     @Column({
         type: DataType.INTEGER,
+        defaultValue: 2,
         allowNull: false,
         field: "max_players",
     })

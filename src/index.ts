@@ -1,11 +1,12 @@
 import app from "./app";
-import { sequelize } from "./config/database";
+import { sequelize, testConnection } from "./config/database";
 
 async function startServer() {
   try {
     const PORT = process.env.PORT || 4000;
 
     await sequelize.sync();
+    await testConnection();
     console.log("Database synchronized");
 
 
