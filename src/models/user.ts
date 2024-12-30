@@ -1,10 +1,10 @@
-import { Table, Column, DataType, Model } from "sequelize-typescript";
+import { Table, Column, Model, DataType } from "sequelize-typescript";
 
 @Table({
   tableName: "users",
   timestamps: true,
   createdAt: "created_at",
-  updatedAt: "updated_at",
+  updatedAt: false,
 })
 export class User extends Model {
   @Column({
@@ -13,14 +13,14 @@ export class User extends Model {
     primaryKey: true,
     field: "user_id",
   })
-  id!: string;
+  declare id: string;
 
   @Column({
     type: DataType.STRING(50),
     allowNull: false,
     unique: true,
   })
-  username!: string;
+  declare username: string;
 
   @Column({
     type: DataType.STRING(255),
@@ -30,11 +30,11 @@ export class User extends Model {
       isEmail: true,
     },
   })
-  email!: string;
+  declare email: string;
 
   @Column({
     type: DataType.STRING(255),
     allowNull: false,
   })
-  password!: string;
+  declare password: string;
 }

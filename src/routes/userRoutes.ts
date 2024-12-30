@@ -1,14 +1,15 @@
 import { Router } from "express";
-import { UserController } from "../../controllers";
-import { UserService } from "../../services";
+import { UserController } from "../controllers/userController";
+import { UserService } from "../services/userService";
 
 const router = Router();
 const userService = new UserService();
 const userController = new UserController(userService);
 
-router.post("/", (req, res) => userController.createUser(req, res));
-router.get("/:id", (req, res) => userController.getUser(req, res));
-router.put("/:id", (req, res) => userController.updateUser(req, res));
-router.delete("/:id", (req, res) => userController.deleteUser(req, res));
+router.post("/users", userController.createUser);
+router.get("/users", userController.getUsers);
+router.get("/users/:id", userController.getUser);
+router.put("/users/:id", userController.updateUser);
+router.delete("/users/:id", userController.deleteUser);
 
 export const userRoutes = router;
