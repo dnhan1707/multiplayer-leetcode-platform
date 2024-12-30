@@ -1,5 +1,6 @@
 import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from "sequelize-typescript";
 import { User } from "./user";
+import { Col } from "sequelize/types/utils";
 
 @Table({
     tableName: "rooms",
@@ -15,6 +16,14 @@ export class Room extends Model {
         field: "room_id",
     })
     declare id: string;
+
+    @Column({
+        type: DataType.STRING(50),
+        allowNull: false,
+        unique: true,
+        field: "room_link"
+    })
+    declare room_link: string;
 
     @Column({
         type: DataType.STRING(50),
