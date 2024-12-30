@@ -1,17 +1,18 @@
 import dotenv from "dotenv";
 import { Sequelize } from "sequelize-typescript";
 import { User } from "../models/user";
+import { Room } from "../models/room";
 
 dotenv.config();
 
 export const sequelize = new Sequelize({
   dialect: "postgres",
   host: process.env.POSTGRES_HOST || "localhost",
-  port: parseInt(process.env.POSTGRES_PORT || "5432"),
-  username: process.env.POSTGRES_USER || "minhluunhat",
+  port: parseInt(process.env.POSTGRES_PORT || "5433"),
+  username: process.env.POSTGRES_USER || "postgres",
   password: process.env.POSTGRES_PASSWORD || "",
-  database: process.env.POSTGRES_DB || "multiplayer_leetcode_platform",
-  models: [User],
+  database: process.env.POSTGRES_DB || "postgres" ,
+  models: [User, Room],
   // logging: process.env.NODE_ENV === "development",
   logging: false,
 });

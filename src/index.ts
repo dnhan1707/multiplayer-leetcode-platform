@@ -8,7 +8,16 @@ async function startServer() {
     await sequelize.sync();
     console.log("Database synchronized");
 
-    app.listen(PORT, () => {
+
+    app.get("/", (req, res) => {
+      try {
+        res.status(200).json({ message: "Connected" });
+      } catch (error) {
+        res.status(500).json({ message: "Internal server error" });
+      }
+    })
+
+    app.listen(PORT, () => {  
       console.log(`Server ready at http://localhost:${PORT}`);
     });
   } catch (err) {
