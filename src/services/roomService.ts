@@ -20,6 +20,17 @@ export class RoomService {
         }
     }
 
+
+    async getRooms() {
+        try {
+            const allRoom = await Room.findAll();
+            return allRoom;
+        } catch (error) {   
+            console.log(`Cannot find all room`);
+            throw error;
+        }
+    }
+
     async getRoomById(id: string) {
         try {
             const roomData = await Room.findByPk(id);
