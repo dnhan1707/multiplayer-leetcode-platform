@@ -15,6 +15,18 @@ export class RoomController {
         }
     }
 
+    joinRoom = async (req: Request, res: Response) => {
+        try {
+            const dataFromRoomService = await this.roomService.joinRoom(req.body.user_id, req.params.room_id);
+            res.status(201).json({
+                message: "Join room successfully",
+                data: dataFromRoomService
+            })
+        } catch (error) {
+            res.status(500).json({message: "Failed to join room"});
+        }
+    }
+
     getRooms = async (req: Request, res: Response) => {
         try {
             const dataFromRoomService = await this.roomService.getRooms();

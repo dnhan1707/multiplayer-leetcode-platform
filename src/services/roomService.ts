@@ -1,5 +1,5 @@
 import { Room } from "../models/room";
-import { error } from "console";
+import { RoomParticipant } from "../models/roomParticipant";
 import { v4 as uuidv4 } from "uuid"; // Install uuid package
 
 export class RoomService {
@@ -20,6 +20,34 @@ export class RoomService {
         }
     }
 
+    async joinRoom(userId: string, roomId: string) {
+        try {
+            const room = await Room.findByPk(roomId);
+            if(!room || room.status !== "active") {
+                throw new Error("Room not exists");
+            }
+
+            const alreadyParticipant = await RoomParticipant.findOne({
+                where: {userId, roomId}
+            })
+
+            if(alreadyParticipant) {
+                throw new Error("User is already a participant in another Room");
+            } 
+
+            const newParticipant = await RoomParticipant.create({
+                userId,
+                roomId,
+                joined_at: new Date()
+            })
+
+            return newParticipant
+
+        } catch (error) {
+            console.log(`User ${userId} couldn't join room: ${roomId}`)
+            throw error
+        }
+    }
 
     async getRooms() {
         try {
@@ -48,7 +76,7 @@ export class RoomService {
         try {
             const room = await Room.findOne({where: {room_id: id}});
             if(!room) {
-                throw error("Room not found")
+                throw new Error("Room not found")
             }
 
             await room.update(data);
@@ -63,7 +91,7 @@ export class RoomService {
         try {
             const room = await Room.findOne({where: {room_id: id}});
             if(!room) {
-                throw error("Room not found")
+                throw new Error("Room not found")
             }
             await room.destroy();
         } catch (error) {

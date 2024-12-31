@@ -8,6 +8,7 @@ const roomService = new RoomService();
 const roomController = new RoomController(roomService);
 
 router.post("/rooms", roomController.createRoom);
+router.post("/room/:id", roomController.joinRoom);
 router.get("/rooms", roomController.getRooms);
 router.get("/rooms/:id", roomController.getRoomById);
 router.put("/rooms/:id", roomController.updateRoom);
