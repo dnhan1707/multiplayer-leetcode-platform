@@ -1,4 +1,6 @@
-import { Table, Column, Model, DataType } from "sequelize-typescript";
+import { Table, Column, Model, DataType, BelongsToMany } from "sequelize-typescript";
+import { Room } from "./room";
+import { RoomParticipant } from "./roomParticipant";
 
 @Table({
   tableName: "users",
@@ -14,6 +16,9 @@ export class User extends Model {
     field: "user_id",
   })
   declare id: string;
+
+  @BelongsToMany(() => Room, () => RoomParticipant)
+  rooms!: Room[]
 
   @Column({
     type: DataType.STRING(50),

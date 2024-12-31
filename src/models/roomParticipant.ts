@@ -8,7 +8,7 @@ import { Room } from "./room";
     timestamps: true
 })
 
-export class roomParticipant extends Model {
+export class RoomParticipant extends Model {
 
     @ForeignKey(() => Room)
     @Column({

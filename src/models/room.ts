@@ -1,5 +1,6 @@
-import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from "sequelize-typescript";
+import { Table, Column, Model, DataType, ForeignKey, BelongsToMany } from "sequelize-typescript";
 import { User } from "./user";
+import { RoomParticipant } from "./roomParticipant";
 
 @Table({
     tableName: "rooms",
@@ -42,8 +43,8 @@ export class Room extends Model {
     })
     declare created_by: string;
 
-    @BelongsTo(() => User)
-    declare user: User;
+    @BelongsToMany(() => User, () => RoomParticipant) //A room can have multiple users as participants
+    participants!: User[];
 
     @Column({
         type: DataType.ENUM("waiting", "ready", "playing", "finished"),
