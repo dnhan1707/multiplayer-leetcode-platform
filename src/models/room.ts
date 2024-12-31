@@ -1,6 +1,5 @@
 import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from "sequelize-typescript";
 import { User } from "./user";
-import { Col } from "sequelize/types/utils";
 
 @Table({
     tableName: "rooms",
