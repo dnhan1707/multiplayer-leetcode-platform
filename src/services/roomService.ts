@@ -59,6 +59,13 @@ export class RoomService {
                 joined_at: new Date()
             });
 
+            const participantCount = await RoomParticipant.count({
+                where: {room_id: roomId}
+            })
+            if(participantCount >= room.max_players) {
+                await room.update({ status: "ready" })
+            }
+
             return newParticipant;
         } catch (error) {
             console.log(`User ${userId} couldn't join room: ${roomId}`);
