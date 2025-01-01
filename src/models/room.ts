@@ -1,4 +1,4 @@
-import { Table, Column, Model, DataType, ForeignKey, BelongsToMany } from "sequelize-typescript";
+import { Table, Column, Model, DataType, ForeignKey, BelongsToMany, BelongsTo } from "sequelize-typescript";
 import { User } from "./user";
 import { RoomParticipant } from "./roomParticipant";
 
@@ -37,14 +37,13 @@ export class Room extends Model {
     @ForeignKey(() => User)
     @Column({
         type: DataType.UUID,
-        defaultValue: DataType.UUIDV4,
         allowNull: false,
         field: "created_by",
     })
     declare created_by: string;
 
-    @BelongsToMany(() => User, () => RoomParticipant) //A room can have multiple users as participants
-    participants!: User[];
+    @BelongsTo(() => User)
+    declare user: User;
 
     @Column({
         type: DataType.ENUM("waiting", "ready", "playing", "finished"),
@@ -60,4 +59,7 @@ export class Room extends Model {
         field: "max_players",
     })
     declare max_players: number;
+
+    @BelongsToMany(() => User, () => RoomParticipant)
+    participants!: User[];
 }

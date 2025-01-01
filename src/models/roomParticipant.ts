@@ -1,22 +1,19 @@
-import { Table, Column, Model, DataType, ForeignKey, BelongsTo, AllowNull } from "sequelize-typescript";
+import { Table, Column, Model, DataType, ForeignKey } from "sequelize-typescript";
 import { User } from "./user";
 import { Room } from "./room";
-
 
 @Table({
     tableName: "room_participants",
     timestamps: true
 })
-
 export class RoomParticipant extends Model {
-
     @ForeignKey(() => Room)
     @Column({
         type: DataType.UUID,
         allowNull: false,
         field: "room_id"
     })
-    declare id: string;
+    declare room_id: string;
 
     @ForeignKey(() => User)
     @Column({
@@ -31,5 +28,5 @@ export class RoomParticipant extends Model {
         allowNull: false,
         field: "joined_at"
     })
-    declare joined_at: string
+    declare joined_at: Date;
 }

@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import { Sequelize } from "sequelize-typescript";
 import { User } from "../models/user";
 import { Room } from "../models/room";
+import { RoomParticipant } from "../models/roomParticipant";
 
 dotenv.config();
 
@@ -12,7 +13,7 @@ export const sequelize = new Sequelize({
   username: process.env.POSTGRES_USER || "postgres",
   password: process.env.POSTGRES_PASSWORD || "",
   database: process.env.POSTGRES_DB || "postgres" ,
-  models: [User, Room],
+  models: [User, Room, RoomParticipant],
   // logging: process.env.NODE_ENV === "development",
   logging: false,
 });

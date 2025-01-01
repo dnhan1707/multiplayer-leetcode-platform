@@ -1,11 +1,16 @@
 import { Room } from "../models/room";
 import { RoomParticipant } from "../models/roomParticipant";
 import { v4 as uuidv4 } from "uuid"; // Install uuid package
+import { User } from "../models/user";
 
 export class RoomService {
     async createRoom(data: { size: number, createdBy: string }) {
         try {
-            // We may want to check if creator Id already in the db
+            const creator = await User.findByPk(data.createdBy);
+            if (!creator) {
+                throw new Error("Creator not found");
+            }
+
             const roomLink = await this.generateRoomLink();
             const newRoom = await Room.create({
                 room_link: roomLink,
@@ -13,6 +18,10 @@ export class RoomService {
                 created_by: data.createdBy,
                 status: "waiting",
             });
+
+            // Add the creator as a participant in the room
+            await this.joinRoom(data.createdBy, newRoom.id);
+
             return newRoom;
         } catch (error) {
             console.log("Cannot create room: ",error);
@@ -23,29 +32,37 @@ export class RoomService {
     async joinRoom(userId: string, roomId: string) {
         try {
             const room = await Room.findByPk(roomId);
-            if(!room || room.status !== "active") {
+            if (!room) {
                 throw new Error("Room not exists");
             }
 
-            const alreadyParticipant = await RoomParticipant.findOne({
-                where: {userId, roomId}
-            })
+            switch (room.status) {
+                case "ready":
+                    throw new Error("Room is full");
+                case "playing":
+                    throw new Error("Room is playing");
+                case "finished":
+                    throw new Error("Room is finished but not eliminated yet");
+            }
 
-            if(alreadyParticipant) {
+            const alreadyParticipant = await RoomParticipant.findOne({
+                where: { user_id: userId, room_id: roomId }
+            });
+
+            if (alreadyParticipant) {
                 throw new Error("User is already a participant in another Room");
-            } 
+            }
 
             const newParticipant = await RoomParticipant.create({
-                userId,
-                roomId,
+                user_id: userId,
+                room_id: roomId,
                 joined_at: new Date()
-            })
+            });
 
-            return newParticipant
-
+            return newParticipant;
         } catch (error) {
-            console.log(`User ${userId} couldn't join room: ${roomId}`)
-            throw error
+            console.log(`User ${userId} couldn't join room: ${roomId}`);
+            throw error;
         }
     }
 
@@ -103,7 +120,6 @@ export class RoomService {
         const existingRoomCode = await Room.findOne({
             where: {
                 room_code: roomCode,
-                status: "active"
             }
         });
         return !existingRoomCode;
