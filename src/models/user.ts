@@ -1,6 +1,7 @@
-import { Table, Column, Model, DataType, BelongsToMany } from "sequelize-typescript";
+import { Table, Column, Model, DataType, BelongsToMany, BeforeCreate, BeforeUpdate } from "sequelize-typescript";
 import { Room } from "./room";
 import { RoomParticipant } from "./roomParticipant";
+import bcrypt from "bcrypt";
 
 @Table({
   tableName: "users",
@@ -42,4 +43,16 @@ export class User extends Model {
     allowNull: false,
   })
   declare password: string;
+
+  @BeforeCreate
+  @BeforeUpdate
+  static async hashPassword(instance: User) {
+    if(instance.changed("password")) {
+      instance.password = await bcrypt.hash(instance.password, 10);
+    }
+  }
+
+  async validatePassword(password: string): Promise<boolean> {
+    return bcrypt.compare(password, this.password);
+  }
 }

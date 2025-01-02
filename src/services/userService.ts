@@ -1,4 +1,5 @@
 import { User } from "../models/user";
+import jwt from "jsonwebtoken";
 
 export class UserService {
   async createUser(data: Pick<User, "username" | "email" | "password">) {
@@ -28,5 +29,29 @@ export class UserService {
     return User.destroy({
       where: { id },
     });
+  } 
+
+  async signUp(data: Pick<User, "username" | "email" | "password">) {
+    const user = await this.createUser(data);
+    const token = this.generateToken(user);
+    return { user, token };
+  }
+
+  async logIn(email: string, password: string) {
+    const user = await User.findOne({ where: { email } });
+    if(!user || !(await user.validatePassword(password))) {
+      throw new Error("Invalid email or password");
+    }
+    const token = this.generateToken(user);
+    return { user, token };
+  }
+  
+  generateToken(user: User) {
+    return jwt.sign({
+      id: user.id,
+    }, process.env.JWT_SECRET || "tempsecretkey", 
+    {
+      expiresIn: "1h"
+    })
   }
 }
