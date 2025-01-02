@@ -1,19 +1,24 @@
-import express, { Response } from "express";
-import cors from "cors";
-import { apiRoutes } from "./routes/api";
-
-const app = express();
+import app from "./app";
+import { sequelize, testConnection } from "./config/database";
 
 async function startServer() {
   try {
     const PORT = process.env.PORT || 4000;
 
-    app.use(cors());
-    app.use(express.json());
+    await sequelize.sync();
+    await testConnection();
+    console.log("Database synchronized");
 
-    app.use("/", apiRoutes);
 
-    app.listen(PORT, () => {
+    app.get("/", (req, res) => {
+      try {
+        res.status(200).json({ message: "Connected" });
+      } catch (error) {
+        res.status(500).json({ message: "Internal server error" });
+      }
+    })
+
+    app.listen(PORT, () => {  
       console.log(`Server ready at http://localhost:${PORT}`);
     });
   } catch (err) {
