@@ -1,5 +1,7 @@
 import app from "./app";
 import { sequelize, testConnection } from "./config/database";
+import { createServer } from "http";
+import { setupSocketIO } from "./socket";
 
 async function startServer() {
   try {
@@ -9,6 +11,8 @@ async function startServer() {
     await testConnection();
     console.log("Database synchronized");
 
+    const server = createServer(app);
+    const io = setupSocketIO(server);
 
     app.get("/", (req, res) => {
       try {
@@ -16,9 +20,9 @@ async function startServer() {
       } catch (error) {
         res.status(500).json({ message: "Internal server error" });
       }
-    })
+    });
 
-    app.listen(PORT, () => {  
+    server.listen(PORT, () => {
       console.log(`Server ready at http://localhost:${PORT}`);
     });
   } catch (err) {
