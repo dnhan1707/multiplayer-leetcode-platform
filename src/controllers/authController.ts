@@ -9,6 +9,7 @@ export class AuthController {
         try {
             const { username, email, password } = req.body;
             const { user, token } = await this.userService.signUp({ username, email, password });
+            res.setHeader('Set-Cookie', `authToken=${token}; Path=/; HttpOnly; SameSite=Lax`);
             res.status(201).json({ user, token });
         } catch (error) {
             res.status(400).json({ message: error });
@@ -20,6 +21,8 @@ export class AuthController {
         try {
           const { email, password } = req.body;
           const { user, token } = await this.userService.logIn(email, password);
+          res.setHeader('Set-Cookie', `authToken=${token}; Path=/; HttpOnly; Secure; SameSite=Strict`);
+
           res.status(200).json({ user, token });
         } catch (error) {
           res.status(400).json({ message: error });

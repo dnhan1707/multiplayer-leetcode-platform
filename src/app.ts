@@ -6,7 +6,10 @@ import { authRoutes } from "./routes/authenticationRoutes";
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000', // Client origin
+    credentials: true,              // Allow cookies to be sent
+}));
 app.use(express.json());
 app.use(authRoutes);
 app.use(userRoutes);
