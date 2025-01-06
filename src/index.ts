@@ -1,5 +1,7 @@
 import app from "./app";
 import { sequelize, testConnection } from "./config/database";
+import { createServer } from "node:http";
+import { Server } from "socket.io";
 
 async function startServer() {
   try {
@@ -9,6 +11,27 @@ async function startServer() {
     await testConnection();
     console.log("Database synchronized");
 
+    const server = createServer(app);
+
+    const io = new Server(server, {
+      cors: {
+        origin: "*", // Update this to restrict access in production
+        methods: ["GET", "POST"],
+      }
+    });
+
+    io.on("connection", (socket) => {
+      console.log("A user connected");
+
+      socket.on("chatMessage", (message) => {
+        socket.broadcast.emit("recieve_message", message)
+      });
+
+      socket.on("disconnect", () => {
+        console.log("User disconnected");
+      });
+    });
+
     app.get("/", (req, res) => {
       try {
         res.status(200).json({ message: "Connected" });
@@ -17,7 +40,7 @@ async function startServer() {
       }
     });
 
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`Server ready at http://localhost:${PORT}`);
     });
   } catch (err) {
