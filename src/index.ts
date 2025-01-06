@@ -23,8 +23,12 @@ async function startServer() {
     io.on("connection", (socket) => {
       console.log("A user connected");
 
-      socket.on("chatMessage", (message) => {
-        socket.broadcast.emit("recieve_message", message)
+      socket.on("join_room", (room_id) => {
+        socket.join(room_id);
+      })
+
+      socket.on("chatMessage", (data) => {
+        socket.to(data.room).emit("recieve_message", data)
       });
 
       socket.on("disconnect", () => {
