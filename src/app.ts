@@ -7,9 +7,7 @@ import { authRoutes } from "./routes/authenticationRoutes";
 const app = express();
 
 app.use(cors({
-    origin: process.env.NODE_ENV === 'development'
-            ? 'https://our-production-domain.com'
-            : 'http://localhost:3000',
+    origin: "http://localhost:3000",
     credentials: true,              // Allow cookies to be sent this is needed for client side, since the token frm JWT is set on the cookies
 }));
 app.use(express.json());
