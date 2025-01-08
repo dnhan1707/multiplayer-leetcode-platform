@@ -39,9 +39,9 @@ export class UserService {
       if (existingUser) {
         throw new Error("Email already in use");
       }
-      if (data.password.length < 8) {
-        throw new Error("Password must be at least 8 characters long");
-      }
+      // if (data.password.length < 8) {
+      //   throw new Error("Password must be at least 8 characters long");
+      // }
       const user = await this.createUser(data);
       const token = this.generateToken(user);
       return { user, token };
