@@ -8,5 +8,6 @@ const authController = new AuthController(userService);
 
 router.post("/signup", authController.signUp);
 router.post("/login", authController.logIn);
+router.get("/logout", authController.logOut);
 
 export const authRoutes = router;
