@@ -3,6 +3,7 @@ import cors from "cors";
 import { userRoutes } from "./routes/userRoutes";
 import { roomRoutes } from "./routes/roomRoutes";
 import { authRoutes } from "./routes/authenticationRoutes";
+import { problemRoutes } from "./routes/problemRoutes";
 
 const app = express();
 
@@ -14,5 +15,7 @@ app.use(express.json());
 app.use(authRoutes);
 app.use(userRoutes);
 app.use(roomRoutes);
+app.use(problemRoutes);
+
 
 export default app;
