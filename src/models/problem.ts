@@ -16,4 +16,26 @@ export class Problem extends Model{
         field: "problem_id"
     })
     declare problem_id: string
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+        field: "title"
+    })
+    declare title: string
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+        field: "description"
+    })
+    declare description: string
+
+    @Column({
+        type: DataType.ENUM("easy", "medium", "hard"),
+        allowNull: false,
+        field: "difficulty_level"
+    })
+    declare difficulty_level: string
+
 }
