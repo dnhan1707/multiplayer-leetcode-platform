@@ -1,5 +1,5 @@
 import app from "./app";
-import { sequelize, testConnection } from "./config/database";
+import { sequelize, testConnection } from "../server/config/database";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
 
