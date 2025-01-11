@@ -1,9 +1,9 @@
 import express from "express";
 import cors from "cors";
-import { userRoutes } from "../server/routes/userRoutes";
-import { roomRoutes } from "../server/routes/roomRoutes";
-import { authRoutes } from "../server/routes/authenticationRoutes";
-import { problemRoutes } from "../server/routes/problemRoutes";
+import { userRoutes } from "../src/routes/userRoutes";
+import { roomRoutes } from "../src/routes/roomRoutes";
+import { authRoutes } from "../src/routes/authenticationRoutes";
+import { problemRoutes } from "../src/routes/problemRoutes";
 
 const app = express();
 
