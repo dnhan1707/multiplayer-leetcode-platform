@@ -7,7 +7,7 @@ export class SubmissionService{
             method: 'POST',
             headers: {
               'x-rapidapi-key': process.env.JUDGE_API || '',
-              'x-rapidapi-host': 'judge0-ce.p.rapidapi.com',
+              'x-rapidapi-host': process.env.JUDGE_HOST || 'judge0-ce.p.rapidapi.com',
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -19,8 +19,8 @@ export class SubmissionService{
 
         try {
             const response = await fetch(url, options);
-            const result = await response.text();
-            return json(result);
+            const result = await response.json();
+            return result;
         } catch (error) {
             console.error(error);
         }
@@ -32,15 +32,15 @@ export class SubmissionService{
         const options = {
         method: 'GET',
         headers: {
-            'x-rapidapi-key': 'f2e6427f71mshc6ca82be8fba5fap1a593ajsn0af01df1a15a',
-            'x-rapidapi-host': 'judge0-ce.p.rapidapi.com'
+            'x-rapidapi-key': process.env.JUDGE_API || '',
+            'x-rapidapi-host': process.env.JUDGE_HOST || 'judge0-ce.p.rapidapi.com',
         }
         };
 
         try {
             const response = await fetch(url, options);
             const result = await response.json();
-            return json(result)   
+            return result  
             // response is just a object, the import key is stdout, stdout is a base64 so we need to decode it using atob()
         } catch (error) {
             console.error(error);
