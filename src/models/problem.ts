@@ -1,4 +1,5 @@
-import { Table, Model, Column, DataType, PrimaryKey } from "sequelize-typescript";
+import { Table, Model, Column, DataType, PrimaryKey, HasMany } from "sequelize-typescript";
+import { Testcase } from "./testcase";
 
 
 @Table({
@@ -38,4 +39,7 @@ export class Problem extends Model{
     })
     declare difficulty_level: string
 
+
+    @HasMany(() => Testcase)
+    testcases!: Testcase[]
 }
