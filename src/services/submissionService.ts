@@ -1,49 +1,60 @@
-import { json } from "sequelize";
 
-export class SubmissionService{
-    async createSubmission(submitedCode: string, languageId: number) {
+export class SubmissionService {
+    private judge_api = process.env.JUDGE_API;
+    private judge_host = process.env.JUDGE_HOST;
+
+    private validateEnvVariables() {
+        if (!this.judge_api || !this.judge_host) {
+            throw new Error("Judge0 API credentials are not set");
+        }
+    }
+
+    private async fetchFromJudge0(url: string, options: RequestInit) {
+        try {
+            const response = await fetch(url, options);
+            if (!response.ok) {
+                const errorDetails = await response.text();
+                throw new Error(`Error: ${response.statusText} - ${errorDetails}`);
+            }
+            return await response.json();
+        } catch (error) {
+            console.error("Fetch error:", error);
+            throw new Error("Failed to communicate with Judge0 API");
+        }
+    }
+
+    async createSubmission(submittedCode: string, languageId: number) {
+        this.validateEnvVariables();
+
         const url = 'https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=true&wait=false&fields=*';
         const options = {
             method: 'POST',
             headers: {
-              'x-rapidapi-key': process.env.JUDGE_API || '',
-              'x-rapidapi-host': process.env.JUDGE_HOST || 'judge0-ce.p.rapidapi.com',
-              'Content-Type': 'application/json'
+                'x-rapidapi-key': this.judge_api || '', 
+                'x-rapidapi-host': this.judge_host || '',
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              language_id: languageId, //93 is language id, here is javascript. We can allow user to pick language on the frontend and handle this later
-              source_code: btoa(submitedCode),
-            //   stdin: 'SnVkZ2Uw' this is the input if needed
+                language_id: languageId,
+                source_code: btoa(submittedCode)
             })
         };
 
-        try {
-            const response = await fetch(url, options);
-            const result = await response.json();
-            return result;
-        } catch (error) {
-            console.error(error);
-        }
+        return this.fetchFromJudge0(url, options);
     }
 
+    async getSubmission(tokenId: string) {
+        this.validateEnvVariables();
 
-    async getSubmission(tokenId: string){
         const url = `https://judge0-ce.p.rapidapi.com/submissions/${tokenId}?base64_encoded=true&fields=*`;
         const options = {
-        method: 'GET',
-        headers: {
-            'x-rapidapi-key': process.env.JUDGE_API || '',
-            'x-rapidapi-host': process.env.JUDGE_HOST || 'judge0-ce.p.rapidapi.com',
-        }
+            method: 'GET',
+            headers: {
+                'x-rapidapi-key': this.judge_api || '',
+                'x-rapidapi-host': this.judge_host || '',
+            }
         };
 
-        try {
-            const response = await fetch(url, options);
-            const result = await response.json();
-            return result  
-            // response is just a object, the import key is stdout, stdout is a base64 so we need to decode it using atob()
-        } catch (error) {
-            console.error(error);
-        }
+        return this.fetchFromJudge0(url, options);
     }
 }

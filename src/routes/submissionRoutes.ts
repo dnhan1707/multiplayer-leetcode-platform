@@ -9,5 +9,4 @@ const submissionController = new SubmissionController(submissionService);
 router.post("/submission", submissionController.createSubmission);
 router.get("/submission/:tokenId", submissionController.getSubmission);
 
-
 export const submissionRoutes = router;
