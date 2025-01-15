@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ProblemService } from "../services/problemServce";
+import { ProblemService } from "../services/problemService";
 
 export class ProblemController{
     constructor(private problemService: ProblemService){};
@@ -28,17 +28,4 @@ export class ProblemController{
         }
     }
 
-    compare = async(req: Request, res: Response) => {
-        try {
-            const returnedValue = req.body;
-            const problemId = req.params.id;
-            const compareResult = this.problemService.compareResult(problemId, returnedValue);
-            res.status(200).json({
-                message: "Compared",
-                result: compareResult
-            })
-        } catch (error) {
-            res.status(500).json({message: "Failed to compare"});
-        }
-    }
 }

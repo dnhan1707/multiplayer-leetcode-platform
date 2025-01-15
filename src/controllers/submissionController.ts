@@ -35,4 +35,42 @@ export class SubmissionController {
             });
         }
     }
+
+    createBatchSubmission = async (req: Request, res: Response) => {
+        try {
+            const { submittedCode, languageId, problemId } = req.body;
+            if (!submittedCode || !languageId || !problemId) {
+                return res.status(400).json({ 
+                    message: "Missing required fields", 
+                    missingFields: {
+                        submittedCode: !submittedCode,
+                        languageId: !languageId,
+                        problemId: !problemId
+                    }
+                });
+            }
+
+            const result = await this.submissionService.batchSubmission(submittedCode, languageId, problemId);
+
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(500).json({
+                message: "Failed to create batch submission",
+                error: error
+            });
+        }
+    }
+
+    getBatchSubmission = async (req: Request, res: Response) => {
+        try {
+            const tokenId = req.params.tokenId;
+            const result = await this.submissionService.getBatchSubmission(tokenId);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(500).json({
+                message: "Failed to get batch submission",
+                error: error
+            });
+        }
+    }
 }
