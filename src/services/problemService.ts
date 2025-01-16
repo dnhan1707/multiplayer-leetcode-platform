@@ -15,5 +15,8 @@ export class ProblemService {
         return problem;
     }
 
-
+    async getProblemTitle(id: string) {
+        const problem = await this.getProblem(id);
+        return problem ? problem.title : null;
+    }
 }

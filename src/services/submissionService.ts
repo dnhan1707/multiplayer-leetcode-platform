@@ -1,4 +1,5 @@
 import { TestcaseService } from "./testcaseService";
+import { ProblemHandler } from "../problems/problemHandler";
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -81,8 +82,12 @@ export class SubmissionService {
     
     async batchSubmission(submittedCode: string, languageId: number, problemId: string) {
         this.validateEnvVariables();
+        
+        //Submitted code need to be modified here
+        const problemHandler = new ProblemHandler(problemId, submittedCode);
+        const modifiedSubmittedCode = await problemHandler.modifySubmittedCode();
 
-        const submissions = await this.prepareBatchSubmission(submittedCode, languageId, problemId);
+        const submissions = await this.prepareBatchSubmission(modifiedSubmittedCode, languageId, problemId);
         const url = `https://judge0-ce.p.rapidapi.com/submissions/batch?base64_encoded=true`;
         const options = {
             method: 'POST',
