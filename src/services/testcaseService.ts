@@ -9,7 +9,7 @@ export class TestcaseService{
     }
 
 
-    async getExpectedValueByTestId(problemId: string) {
+    async getExpectedValueProblemId(problemId: string) {
         const testcases = await Testcase.findAll({
             where: {problem_id: problemId},
         })
