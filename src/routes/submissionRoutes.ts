@@ -11,5 +11,4 @@ router.get("/submission/:tokenId", submissionController.getSubmission);
 router.post("/submission/batch", submissionController.createBatchSubmission);
 router.post("/submission/batch/recieve", submissionController.getBatchSubmission);
 
-
 export const submissionRoutes = router;

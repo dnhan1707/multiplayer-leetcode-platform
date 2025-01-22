@@ -3,6 +3,20 @@ import { ProblemHandler } from "../problems/problemHandler";
 import dotenv from 'dotenv';
 dotenv.config();
 
+interface Submission {
+    language_id: number;
+    stdin: string;
+    expected_output: string;
+    stdout: string;
+    status_id: number;
+    stderr: string | null;
+    token: string;
+}
+
+interface SubmissionResult {
+    submissions: Submission[];
+}
+
 export class SubmissionService {
     private judge_api = process.env.JUDGE_API;
     private judge_host = process.env.JUDGE_HOST;
@@ -112,14 +126,14 @@ export class SubmissionService {
     
     async getBatchSubmission(tokenIds: Array<{ token: string }>) {
         this.validateEnvVariables();
-    
+        console.log("get batch submission tokenIds: ", tokenIds);
         if (!tokenIds || tokenIds.length === 0) {
             throw new Error("No tokens provided for batch submission.");
         }
     
         const tokensString = tokenIds.map(item => item.token).join('%2C');
     
-        const url = `https://judge0-ce.p.rapidapi.com/submissions/batch?tokens=${tokensString}&base64_encoded=true&fields=token,stdout,stderr,expected_output,status_id,language_id`;
+        const url = `https://judge0-ce.p.rapidapi.com/submissions/batch?tokens=${tokensString}&base64_encoded=true&fields=token,stdout,stdin,stderr,expected_output,status_id,language_id`;
         const options = {
             method: 'GET',
             headers: {
@@ -130,7 +144,7 @@ export class SubmissionService {
     
         try {
             const response = await this.fetchFromJudge0(url, options);
-            return response;
+            return this.validateResult(response);
         } catch (error) {
             console.error("Failed to fetch batch submission:", {
                 error,
@@ -140,4 +154,26 @@ export class SubmissionService {
             throw new Error("Error fetching batch submission.");
         }
     }    
+
+    async validateResult(submission: SubmissionResult) {
+        let wrongCase: { case: string; expected: string; received: string }[] = [];
+        const submissionsList = submission.submissions;
+        submissionsList.forEach((submission) => {
+            if (submission.status_id !== 3) {
+                wrongCase.push({
+                    case: atob(submission.stdin),
+                    expected: atob(submission.expected_output),
+                    received: atob(submission.stdout)
+                });
+            }
+        });
+
+        if (wrongCase.length === 0) {
+            return { success: true };
+        }
+        return {
+            success: false,
+            wrong_answer: wrongCase
+        };
+    }
 }
