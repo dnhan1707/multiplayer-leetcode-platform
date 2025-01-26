@@ -28,4 +28,15 @@ export class ProblemController{
         }
     }
 
+    getTestcaseByProblemId = async(req: Request, res: Response) => {
+        try {
+            const testcases = await this.problemService.getTestCaseById(req.params.id);
+            res.status(200).json({
+                testcase: testcases
+            })
+        } catch (error) {
+            res.status(500).json({message: "Failed to get a problem testcases by problem Id"});
+        }
+    }
+
 }

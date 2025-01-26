@@ -1,5 +1,4 @@
 import { Problem } from "../models/problem";
-import { Testcase } from "../models/testcase";
 import { TestcaseService } from "./testcaseService";
 
 export class ProblemService {
@@ -18,5 +17,11 @@ export class ProblemService {
     async getProblemTitle(id: string) {
         const problem = await this.getProblem(id);
         return problem ? problem.title : null;
+    }
+
+    async getTestCaseById(id: string) {
+        const testcaseService = new TestcaseService();
+        const testcases = testcaseService.getTestcaseByProblemId(id);
+        return testcases;
     }
 }
