@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ProblemService } from "../services/problemServce";
+import { ProblemService } from "../services/problemService";
 
 export class ProblemController{
     constructor(private problemService: ProblemService){};
@@ -15,4 +15,28 @@ export class ProblemController{
             res.status(500).json({message: "Failed to get random problem"});
         }
     }
+
+    getProblem = async(req: Request, res: Response) => {
+        try {
+            const problem = await this.problemService.getProblem(req.params.id)
+            res.status(200).json({
+                message: "got a problem by id",
+                problem: problem
+            })
+        } catch (error) {
+            res.status(500).json({message: "Failed to get a problem by Id"});
+        }
+    }
+
+    getTestcaseByProblemId = async(req: Request, res: Response) => {
+        try {
+            const testcases = await this.problemService.getTestCaseById(req.params.id);
+            res.status(200).json({
+                testcase: testcases
+            })
+        } catch (error) {
+            res.status(500).json({message: "Failed to get a problem testcases by problem Id"});
+        }
+    }
+
 }
