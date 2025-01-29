@@ -16,7 +16,6 @@ app.use(authRoutes);
 app.use(userRoutes);
 app.use(roomRoutes);
 app.use(problemRoutes);
-app.use(submissionRoutes);
 
 
 export default app;
