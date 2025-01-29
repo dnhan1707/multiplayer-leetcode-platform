@@ -1,9 +1,10 @@
 import express from "express";
 import cors from "cors";
-import { userRoutes } from "./routes/userRoutes";
-import { roomRoutes } from "./routes/roomRoutes";
-import { authRoutes } from "./routes/authenticationRoutes";
-import { problemRoutes } from "./routes/problemRoutes";
+import { userRoutes } from "../src/routes/userRoutes";
+import { roomRoutes } from "../src/routes/roomRoutes";
+import { authRoutes } from "../src/routes/authenticationRoutes";
+import { problemRoutes } from "../src/routes/problemRoutes";
+import { submissionRoutes } from "./routes/submissionRoutes";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(authRoutes);
 app.use(userRoutes);
 app.use(roomRoutes);
 app.use(problemRoutes);
+app.use(submissionRoutes);
 
 
 export default app;

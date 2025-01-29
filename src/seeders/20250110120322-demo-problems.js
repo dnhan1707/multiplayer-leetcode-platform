@@ -26,6 +26,13 @@ module.exports = {
         description: "<p>Given an array of integers <code>nums</code>&nbsp;and an integer <code>target</code>, return <em>indices of the two numbers such that they add up to <code>target</code></em>.</p>",
         difficulty_level: "hard",
         created_at: new Date(),
+      },
+      {
+        problem_id: uuidv4(),
+        title: "Test Problem",
+        description: "<p>Given an array of integers <code>nums</code>&nbsp;and an integer <code>target</code>, return <em>indices of the two numbers such that they add up to <code>target</code></em>.</p>",
+        difficulty_level: "hard",
+        created_at: new Date(),
       }
     ], {});
   },
