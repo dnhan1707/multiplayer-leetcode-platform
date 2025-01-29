@@ -4,9 +4,12 @@ import { User } from "../models/user";
 import { Room } from "../models/room";
 import { RoomParticipant } from "../models/roomParticipant";
 import { Message } from "../models/message";
+<<<<<<< HEAD
 import { Problem } from "../models/problem";
 import { RoomProblem } from "../models/roomProblem";
 import { Testcase } from "../models/testcase";
+=======
+>>>>>>> 9f25831 (changed back)
 
 dotenv.config();
 
@@ -17,7 +20,11 @@ export const sequelize = new Sequelize({
   username: process.env.POSTGRES_USER || "postgres",
   password: process.env.POSTGRES_PASSWORD || "",
   database: process.env.POSTGRES_DB || "postgres" ,
+<<<<<<< HEAD
   models: [User, Room, RoomParticipant, RoomProblem, Message, Problem, Testcase],
+=======
+  models: [User, Room, RoomParticipant, Message],
+>>>>>>> 9f25831 (changed back)
   // logging: process.env.NODE_ENV === "development",
   logging: false,
 });
