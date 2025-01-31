@@ -5,7 +5,14 @@ export class RoomController {
     constructor (private roomService: RoomService) {}
     createRoom = async (req: Request, res: Response) => {
         try {
-            const dataFromRoomService = await this.roomService.createRoom(req.body);
+            if(!req.user) {
+                return res.status(401).json({message: "Unauthorized"});
+            }
+
+            const userId = req.user.id;
+            const { roomSize } = req.body;
+            
+            const dataFromRoomService = await this.roomService.createRoom({ roomSize, userId });
             res.status(201).json({
                 message: "Room created",
                 data: dataFromRoomService
