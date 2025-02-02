@@ -43,8 +43,10 @@ export class UserService {
       //   throw new Error("Password must be at least 8 characters long");
       // }
       const user = await this.createUser(data);
-      const token = this.generateToken(user);
-      return { user, token };
+      const token = this.generateToken(user.id);
+      const refreshToken = this.generateRefreshToken(user.id);
+
+      return { user, token, refreshToken };
     } catch (error) {
       console.error(error);
       throw new Error("Something went wrong. Please try again later.");
@@ -53,14 +55,19 @@ export class UserService {
 
   async logIn(email: string, password: string) {
     try {
+      console.log('email ', email)
+      console.log('p ', password)
+
       const user = await User.findOne({ where: { email } });
       if (!user) throw new Error("Invalid credentials");
   
       const isPasswordMatched = await bcrypt.compare(password, user.password);
       if (!isPasswordMatched) throw new Error("Invalid credentials");
   
-      const token = this.generateToken(user);
-      return { user, token };
+      const token = this.generateToken(user.id);
+      const refreshToken = this.generateRefreshToken(user.id);
+
+      return { user, token, refreshToken };
     } catch (error) {
       console.error(error);
       throw new Error("Something went wrong. Please try again later.");
@@ -68,12 +75,33 @@ export class UserService {
   }
   
 
-  generateToken(user: User) {
+  generateToken(userId: string) {
     return jwt.sign({
-      id: user.id,
+      id: userId,
     }, process.env.JWT_SECRET || "tempsecretkey", 
     {
       expiresIn: process.env.EXP_JWT
+    })
+  }
+
+  generateRefreshToken(userId: string) {
+    return jwt.sign({
+      id: userId,
+    }, process.env.JWT_REFRESH_SECRET || "tempRefreshSecretkey", 
+    {
+      expiresIn: process.env.REFRESH_EXP_JWT
+    })
+  }
+
+  verifyToken(token: string) {
+    return new Promise((resolve, reject) => {
+      jwt.verify(token, process.env.JWT_SECRET || "tempsecretkey" , (err, decoded) => {
+        if(err) {
+          reject(err)
+        } else {
+          resolve(decoded)
+        }
+      })
     })
   }
 }

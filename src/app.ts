@@ -4,18 +4,27 @@ import { userRoutes } from "./routes/userRoutes";
 import { roomRoutes } from "./routes/roomRoutes";
 import { authRoutes } from "./routes/authenticationRoutes";
 import { problemRoutes } from "./routes/problemRoutes";
+import { submissionRoutes } from "./routes/submissionRoutes";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
-app.use(cors({
-    origin: "http://localhost:3000",
-    credentials: true,              // Allow cookies to be sent this is needed for client side, since the token frm JWT is set on the cookies
-}));
+// Middleware setup
 app.use(express.json());
+app.use(cookieParser());
+app.use(
+    cors({
+        origin: "http://localhost:3000", // Ensure this matches frontend
+        credentials: true, // Needed for HTTP-only cookies
+    })
+);
+
+// Apply only public routes here (No auth required)
 app.use(authRoutes);
+
+// Apply protected routes separately
 app.use(userRoutes);
 app.use(roomRoutes);
 app.use(problemRoutes);
-
 
 export default app;
