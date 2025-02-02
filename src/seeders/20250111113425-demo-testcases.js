@@ -8,7 +8,7 @@ module.exports = {
     await queryInterface.bulkInsert('testcases', [
       {
         test_id: uuidv4(),
-        problem_id: "5dbee3d8-a71b-4e4e-b606-7c7394b9b42c",
+        problem_id: "0c6624da-db6c-41bb-a4e2-901e9ad2d3af",
         input_data: "[[3, 2, 4], 9]",
         expected_output: "[1, 2]",
         is_hidden: false,
@@ -16,7 +16,7 @@ module.exports = {
       },
       {
         test_id: uuidv4(),
-        problem_id: "9a66d3a0-d7dd-4fe6-a4df-798df6c46bba",
+        problem_id: "0c6624da-db6c-41bb-a4e2-901e9ad2d3af",
         input_data: "[[3, 3], 6]",
         expected_output: "[0, 1]",
         is_hidden: true,
@@ -24,7 +24,7 @@ module.exports = {
       },
       {
         test_id: uuidv4(),
-        problem_id: "179f3211-c493-4216-acd4-5dc6a5b12c8c",
+        problem_id:"0c6624da-db6c-41bb-a4e2-901e9ad2d3af",
         input_data: "5,6",
         expected_output: "11",
         is_hidden: true,
@@ -32,7 +32,7 @@ module.exports = {
       },
       {
         test_id: uuidv4(),
-        problem_id: "179f3211-c493-4216-acd4-5dc6a5b12c8c",
+        problem_id: "0c6624da-db6c-41bb-a4e2-901e9ad2d3af",
         input_data: "7,6",
         expected_output: "13",
         is_hidden: true,
@@ -40,7 +40,7 @@ module.exports = {
       },
       {
         test_id: uuidv4(),
-        problem_id: "d80e0eab-11e9-47b1-9226-cf7d9e1ec373",
+        problem_id:"0c6624da-db6c-41bb-a4e2-901e9ad2d3af",
         input_data: "[[2, 7, 11, 15], 9]",
         expected_output: "[ 0, 1 ]\n",
         is_hidden: false,
@@ -48,7 +48,7 @@ module.exports = {
       },
       {
         test_id: uuidv4(),
-        problem_id: "d80e0eab-11e9-47b1-9226-cf7d9e1ec373",
+        problem_id: "0c6624da-db6c-41bb-a4e2-901e9ad2d3af",
         input_data: "[[3, 2, 4], 6]",
         expected_output: "[ 1, 2 ]\n",
         is_hidden: true,
@@ -56,7 +56,7 @@ module.exports = {
       },
       {
         test_id: uuidv4(),
-        problem_id: "d80e0eab-11e9-47b1-9226-cf7d9e1ec373",
+        problem_id: "0c6624da-db6c-41bb-a4e2-901e9ad2d3af",
         input_data: "[[3, 3], 6]",
         expected_output: "[ 0, 1 ]\n",
         is_hidden: true,
