@@ -39,6 +39,7 @@ export class SubmissionController {
     createBatchSubmission = async (req: Request, res: Response) => {
         try {
             const { submittedCode, languageId, problemId } = req.body;
+            console.log("submittedCode", submittedCode);
             if (!submittedCode || !languageId || !problemId) {
                 return res.status(400).json({ 
                     message: "Missing required fields", 

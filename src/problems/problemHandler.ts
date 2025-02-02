@@ -5,7 +5,10 @@ export class ProblemHandler {
     private problemService = new ProblemService();
 
     modifySubmittedCode = async () => {
+        console.log("In here");
+        console.log("Problem ID", this.problem_id);
         if (await this.problemService.getProblemTitle(this.problem_id) == "Two Sum") {
+            console.log("It's Two Sum");
             const twoSum = new TwoSum();
             return await twoSum.modifySubmittedCode(this.submitted_code);
         }

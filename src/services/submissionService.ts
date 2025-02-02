@@ -86,7 +86,9 @@ export class SubmissionService {
         const testcases = await testcaseService.getTestcaseByProblemId(problemId);
         // get the expected output here
         const expected_output = await testcaseService.getExpectedValueProblemId(problemId);
-        // console.log(testcases);
+        console.log("TEstcases in service: ",testcases);
+        console.log("expected_output in service: ",expected_output);
+
         return testcases.map((testcase: string, index: number) => ({
             language_id: languageId,
             source_code: btoa(submittedCode),
@@ -100,9 +102,12 @@ export class SubmissionService {
         
         //Submitted code need to be modified here
         const problemHandler = new ProblemHandler(problemId, submittedCode);
+        console.log("Problem Handler in service: ", problemHandler);
         const modifiedSubmittedCode = await problemHandler.modifySubmittedCode();
+        console.log("Modified Submitted Code in service: ", modifiedSubmittedCode);
 
         const submissions = await this.prepareBatchSubmission(modifiedSubmittedCode, languageId, problemId);
+        console.log("Submissions in service: ", submissions);
         const url = `https://judge0-ce.p.rapidapi.com/submissions/batch?base64_encoded=true`;
         const options = {
             method: 'POST',
