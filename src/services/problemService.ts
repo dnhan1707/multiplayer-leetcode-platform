@@ -1,3 +1,4 @@
+import { where } from "sequelize";
 import { Problem } from "../models/problem";
 import { TestcaseService } from "./testcaseService";
 
@@ -7,6 +8,14 @@ export class ProblemService {
         const randomIndex = Math.floor(Math.random() * problemCount);
         const randomProblem = await Problem.findOne({ offset: randomIndex });
         return randomProblem;
+    }
+
+    async getProblemByTitle(title: string) {
+        if(title == "Random") {
+            return this.getRandomProblem();
+        }
+        const problem = await Problem.findOne({ where : { title }})
+        return problem
     }
 
     async getProblem(id: string) {
