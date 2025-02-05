@@ -26,7 +26,7 @@ export class Problem extends Model{
     declare title: string
 
     @Column({
-        type: DataType.STRING,
+        type: DataType.TEXT,
         allowNull: false,
         field: "description"
     })
