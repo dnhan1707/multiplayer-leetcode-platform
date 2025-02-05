@@ -15,6 +15,9 @@ export class ProblemHandler {
             case "Remove Element":
                 const removeElement = new RemoveElement();
                 return await removeElement.modifySubmittedCode(this.submitted_code);
+            case "Contain Duplicate":
+                const containDuplicate = new ContainDuplicate();
+                return await containDuplicate.modifySubmittedCode(this.submitted_code);
             default:
                 return this.submitted_code;
         }
@@ -51,6 +54,23 @@ export class RemoveElement {
             const input = require('fs').readFileSync('/dev/stdin', 'utf8').trim();
             const [nums, val] = JSON.parse(input);
             const result = removeElement(nums, val);
+            console.log(result);
+        `;
+        return modifiedCode;
+    }
+}
+
+export class ContainDuplicate {
+    modifySubmittedCode = async (submittedCode: string) => {
+        if (!submittedCode) {
+            throw new Error("Missing submitted code");
+        }
+        const modifiedCode = `
+            ${submittedCode}
+
+            const input = require('fs').readFileSync('/dev/stdin', 'utf8').trim();
+            const [nums] = JSON.parse(input);
+            const result = containDuplicate(nums);
             console.log(result);
         `;
         return modifiedCode;
