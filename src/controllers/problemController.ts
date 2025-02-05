@@ -16,6 +16,18 @@ export class ProblemController{
         }
     }
 
+    getProblemByTitle = async(req: Request, res: Response) => {
+        try {
+            const problem = await this.problemService.getProblemByTitle(req.params.title)
+            res.status(200).json({
+                message: "got a problem by title",
+                problem: problem
+            })
+        } catch (error) {
+            res.status(500).json({message: "Failed to get a problem by title"});
+        }
+    }
+
     getProblem = async(req: Request, res: Response) => {
         try {
             const problem = await this.problemService.getProblem(req.params.id)
