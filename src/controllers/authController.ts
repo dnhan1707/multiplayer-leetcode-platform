@@ -28,8 +28,7 @@ export class AuthController {
         try {
             const { email, password } = req.body;
             const { user, token, refreshToken } = await this.userService.logIn(email, password);
-            
-            console.log(email, password)
+    
             res.setHeader("Set-Cookie", [
                 `authToken=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Domain=localhost`,
                 `refreshToken=${refreshToken}; Path=/; HttpOnly; Secure; SameSite=Strict; Domain=localhost`
