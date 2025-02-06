@@ -4,6 +4,9 @@ import { User } from "../models/user";
 import { Room } from "../models/room";
 import { RoomParticipant } from "../models/roomParticipant";
 import { Message } from "../models/message";
+import { Problem } from "../models/problem";
+import { RoomProblem } from "../models/roomProblem";
+import { Testcase } from "../models/testcase";
 
 dotenv.config();
 
@@ -14,7 +17,7 @@ export const sequelize = new Sequelize({
   username: process.env.POSTGRES_USER || "postgres",
   password: process.env.POSTGRES_PASSWORD || "",
   database: process.env.POSTGRES_DB || "postgres" ,
-  models: [User, Room, RoomParticipant, Message],
+  models: [User, Room, RoomParticipant, RoomProblem, Message, Problem, Testcase],
   // logging: process.env.NODE_ENV === "development",
   logging: false,
 });

@@ -7,7 +7,7 @@ dotenv.config();
 module.exports = {
   development: {
     username: process.env.POSTGRES_USER || "postgres",
-    password: process.env.POSTGRES_PASSWORD || "Shizawnular123!",
+    password: process.env.POSTGRES_PASSWORD || "",
     database: process.env.POSTGRES_DB || "postgres" ,
     host: process.env.POSTGRES_HOST || "localhost",
     port: parseInt(process.env.POSTGRES_PORT || "5433"),
