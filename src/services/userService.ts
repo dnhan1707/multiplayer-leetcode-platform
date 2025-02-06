@@ -55,6 +55,9 @@ export class UserService {
 
   async logIn(email: string, password: string) {
     try {
+      console.log('email ', email)
+      console.log('p ', password)
+
       const user = await User.findOne({ where: { email } });
       if (!user) throw new Error("Invalid credentials");
   

@@ -46,7 +46,7 @@ export class SubmissionService {
         console.log("In here")
         this.validateEnvVariables();
 
-        const url = 'https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=true&wait=false&fields=*';
+        const url = 'https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=false&wait=false&fields=*';
         const options = {
             method: 'POST',
             headers: {
@@ -56,7 +56,7 @@ export class SubmissionService {
             },
             body: JSON.stringify({
                 language_id: languageId,
-                source_code: btoa(submittedCode)
+                source_code: submittedCode
             })
         };
 
@@ -66,7 +66,7 @@ export class SubmissionService {
     async getSubmission(tokenId: string) {
         this.validateEnvVariables();
 
-        const url = `https://judge0-ce.p.rapidapi.com/submissions/${tokenId}?base64_encoded=true&fields=*`;
+        const url = `https://judge0-ce.p.rapidapi.com/submissions/${tokenId}?base64_encoded=false&fields=*`;
         const options = {
             method: 'GET',
             headers: {
@@ -91,9 +91,9 @@ export class SubmissionService {
 
         return testcases.map((testcase: string, index: number) => ({
             language_id: languageId,
-            source_code: btoa(submittedCode),
-            stdin: btoa(testcase),
-            expected_output: btoa(expected_output[index])
+            source_code: submittedCode,
+            stdin: testcase,
+            expected_output: expected_output[index]
         }));
     }
     
@@ -101,14 +101,14 @@ export class SubmissionService {
         this.validateEnvVariables();
         
         //Submitted code need to be modified here
-        const problemHandler = new ProblemHandler(problemId, submittedCode);
+        const problemHandler = new ProblemHandler(problemId, languageId, submittedCode);
         console.log("Problem Handler in service: ", problemHandler);
         const modifiedSubmittedCode = await problemHandler.modifySubmittedCode();
         console.log("Modified Submitted Code in service: ", modifiedSubmittedCode);
 
         const submissions = await this.prepareBatchSubmission(modifiedSubmittedCode, languageId, problemId);
         console.log("Submissions in service: ", submissions);
-        const url = `https://judge0-ce.p.rapidapi.com/submissions/batch?base64_encoded=true`;
+        const url = `https://judge0-ce.p.rapidapi.com/submissions/batch?base64_encoded=false`;
         const options = {
             method: 'POST',
             headers: {
@@ -121,6 +121,7 @@ export class SubmissionService {
     
         try {
             const response = await this.fetchFromJudge0(url, options);
+
             console.log("Batch Submission Result:", response);
             return response;
         } catch (error) {
@@ -131,13 +132,15 @@ export class SubmissionService {
     
     async getBatchSubmission(tokenIds: Array<{ token: string }>) {
         this.validateEnvVariables();
+
         console.log("get batch submission tokenIds: ", tokenIds);
         if (!tokenIds || tokenIds.length === 0) {
             throw new Error("No tokens provided for batch submission.");
         }
     
         const tokensString = tokenIds.map(item => item.token).join('%2C');
-    
+        console.log("get batch submission tokenStrings: ", tokensString);
+
         const url = `https://judge0-ce.p.rapidapi.com/submissions/batch?tokens=${tokensString}&base64_encoded=true&fields=token,stdout,stdin,stderr,expected_output,status_id,language_id`;
         const options = {
             method: 'GET',
@@ -149,6 +152,8 @@ export class SubmissionService {
     
         try {
             const response = await this.fetchFromJudge0(url, options);
+
+            console.log(response)
             return this.validateResult(response);
         } catch (error) {
             console.error("Failed to fetch batch submission:", {
