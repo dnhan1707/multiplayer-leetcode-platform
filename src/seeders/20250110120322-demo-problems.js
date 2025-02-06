@@ -20,13 +20,27 @@ module.exports = {
       //   difficulty_level: "easy",
       //   created_at: new Date(),
       // },
-      {
-        problem_id: uuidv4(),
-        title: "Contain Duplicate",
-        description: "<p>Given an integer array <code>nums</code>, return <code><span>true</span></code> if any value appears <strong>more than once</strong> in the array, otherwise return <code><span>false</span></code>.</p>",
-        difficulty_level: "easy",
-        created_at: new Date(),
-      }, 
+      // {
+      //   problem_id: uuidv4(),
+      //   title: "Contain Duplicate",
+      //   description: "<p>Given an integer array <code>nums</code>, return <code><span>true</span></code> if any value appears <strong>more than once</strong> in the array, otherwise return <code><span>false</span></code>.</p>",
+      //   difficulty_level: "easy",
+      //   created_at: new Date(),
+      // }, 
+      // {
+      //   problem_id: uuidv4(),
+      //   title: "Valid Anagram",
+      //   description: "<p>Given two strings <code>s</code> and <code>t</code>, return <code>true</code> if <code>t</code> is an <span><div><div><div><div>anagram</div></div><div></div></div></div></span> of <code>s</code>, and <code>false</code> otherwise.</p>",
+      //   difficulty_level: "easy",
+      //   created_at: new Date(),
+      // }, 
+      // {
+      //   problem_id: uuidv4(),
+      //   title: "Group Anagram",
+      //   description: "<p>Given two strings <code>s</code> and <code>t</code>, return <code>true</code> if <code>t</code> is an <span><div><div><div><div>anagram</div></div><div></div></div></div></span> of <code>s</code>, and <code>false</code> otherwise.</p>",
+      //   difficulty_level: "easy",
+      //   created_at: new Date(),
+      // },
     ], {});
   },
 
