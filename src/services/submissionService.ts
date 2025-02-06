@@ -121,6 +121,7 @@ export class SubmissionService {
     
         try {
             const response = await this.fetchFromJudge0(url, options);
+
             console.log("Batch Submission Result:", response);
             return response;
         } catch (error) {

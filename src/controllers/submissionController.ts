@@ -65,7 +65,7 @@ export class SubmissionController {
     getBatchSubmission = async (req: Request, res: Response) => {
         try {
             const { tokenIds } = req.body;
-            // console.log(tokenIds);
+            console.log("getBatchSubmission", tokenIds);
             const result = await this.submissionService.getBatchSubmission(tokenIds)
             res.status(200).json(result);
         } catch (error) {
