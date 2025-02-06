@@ -47,36 +47,70 @@ export class TwoSum {
                 break;
 
             case 54: // C++
-                modifiedCode = `
+                modifiedCode = 
+                    `
                     #include <iostream>
                     #include <vector>
-                    #include <nlohmann/json.hpp>
-                    using namespace std;
-                    using json = nlohmann::json;
+                    #include <string>
+                    #include <algorithm>
+
+                    ${submittedCode.trim().split('\n').map(line => {
+                        line = line.trim();
+                        if (line.startsWith('return') || line.startsWith('{') || line.startsWith('}')) {
+                            return '    ' + line; // Indent these lines one level
+                        }
+                        return '        ' + line; // Indent all other lines two levels
+                    }).join('\n')}
                     
-                    ${submittedCode}
-                    
+
                     int main() {
-                        string input;
-                        getline(cin, input);
-                        json j = json::parse(input);
-                        vector<int> nums = j[0];
-                        int target = j[1];
-                        vector<int> result = twoSum(nums, target);
+                        std::string input;
+                        std::getline(std::cin, input);
                         
-                        cout << "[" << result[0] << ", " << result[1] << "]" << endl;
+                        // Parse input manually
+                        std::vector<int> nums;
+                        int target;
+                        
+                        // Remove brackets and split by comma
+                        input = input.substr(1, input.length() - 2);
+                        size_t pos = input.find(']');
+                        std::string numsStr = input.substr(0, pos);
+                        std::string targetStr = input.substr(pos + 2);
+                        
+                        // Parse nums
+                        size_t start = 0, end = 0;
+                        while ((end = numsStr.find(',', start)) != std::string::npos) {
+                            nums.push_back(std::stoi(numsStr.substr(start, end - start)));
+                            start = end + 1;
+                        }
+                        nums.push_back(std::stoi(numsStr.substr(start)));
+                        
+                        // Parse target
+                        target = std::stoi(targetStr);
+                        
+                        std::vector<int> result = twoSum(nums, target);
+                        
+                        std::cout << "[" << result[0] << ", " << result[1] << "]" << std::endl;
                         return 0;
-                    }
-                `;
+                    }`;
                 break;
 
-            case 100: // Python
+            case 71: // Python
                 modifiedCode = 
-                `import sys, json\n
-                ${submittedCode}   
-                input_data = json.loads(sys.stdin.read().strip())
-                nums, target = input_data\nresult = two_sum(nums, target)
-                print(result)`;
+`import sys, json
+
+${submittedCode.trim().split('\n').map(line => {
+    line = line.trim();
+    if (line.startsWith('return')) {
+        return '    ' + line; // Add 4 spaces (1 tab) before return statements
+    }
+    return line;
+}).join('\n')}
+
+input_data = json.loads(sys.stdin.read().strip())
+nums, target = input_data
+result = two_sum(nums, target)
+print(result)`;
             
                 break;
 

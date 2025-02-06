@@ -132,14 +132,16 @@ export class SubmissionService {
     
     async getBatchSubmission(tokenIds: Array<{ token: string }>) {
         this.validateEnvVariables();
+
         console.log("get batch submission tokenIds: ", tokenIds);
         if (!tokenIds || tokenIds.length === 0) {
             throw new Error("No tokens provided for batch submission.");
         }
     
         const tokensString = tokenIds.map(item => item.token).join('%2C');
-    
-        const url = `https://judge0-ce.p.rapidapi.com/submissions/batch?tokens=${tokensString}&base64_encoded=false&fields=token,stdout,stdin,stderr,expected_output,status_id,language_id`;
+        console.log("get batch submission tokenStrings: ", tokensString);
+
+        const url = `https://judge0-ce.p.rapidapi.com/submissions/batch?tokens=${tokensString}&base64_encoded=true&fields=token,stdout,stdin,stderr,expected_output,status_id,language_id`;
         const options = {
             method: 'GET',
             headers: {
