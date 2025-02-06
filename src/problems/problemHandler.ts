@@ -97,7 +97,7 @@ export class GroupAnagram extends BaseModifier {
     modifySubmittedCode = async (submittedCode: string) => {
         const inputCode = `
             const [strs] = JSON.parse(input);
-            const result = validAnagram(strs);
+            const result = groupAnagram(strs);
             console.log(result);
         `;
         return this.generateModifiedCode(submittedCode, inputCode);
