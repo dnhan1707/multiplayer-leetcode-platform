@@ -103,6 +103,7 @@ export class SubmissionService {
         //Submitted code need to be modified here
         const problemHandler = new ProblemHandler(problemId, languageId, submittedCode);
         console.log("Problem Handler in service: ", problemHandler);
+        
         const modifiedSubmittedCode = await problemHandler.modifySubmittedCode();
         console.log("Modified Submitted Code in service: ", modifiedSubmittedCode);
 
