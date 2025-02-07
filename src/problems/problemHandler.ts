@@ -23,15 +23,10 @@ ${code}`;
 }
 
 class JavascriptProcessor implements InputProcessor {
-    processInput(input: string): string {
-        return `const input = require('fs').readFileSync('/dev/stdin', 'utf8').trim();`;
-    }
-
-    wrapCode(code: string, inputProcessing: string): string {
-        return `${code}
-
-${inputProcessing}`;
-
+    processInput(code: string): string {
+        return `
+${code}    
+const input = require('fs').readFileSync('/dev/stdin', 'utf8').trim();`;
     }
 }
 
@@ -61,7 +56,8 @@ if __name__ == "__main__":
     result = twoSum(nums, target)
     print(result)`,
             [languageENUM.JAVASCRIPT] : 
-`const [nums, target] = JSON.parse(input);
+`
+const [nums, target] = JSON.parse(input);
 const result = twoSum(nums, target);
 console.log(result);`
         };

@@ -142,7 +142,7 @@ export class SubmissionService {
         const tokensString = tokenIds.map(item => item.token).join('%2C');
         console.log("get batch submission tokenStrings: ", tokensString);
 
-        const url = `https://judge0-ce.p.rapidapi.com/submissions/batch?tokens=${tokensString}&base64_encoded=false&fields=token,stdout,stdin,stderr,expected_output,status_id,language_id`;
+        const url = `https://judge0-ce.p.rapidapi.com/submissions/batch?tokens=${tokensString}&base64_encoded=true&fields=token,stdout,stdin,stderr,expected_output,status_id,language_id`;
         const options = {
             method: 'GET',
             headers: {
