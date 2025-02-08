@@ -22,15 +22,20 @@ async function startServer() {
 
     io.on("connection", (socket) => {
       socket.on("join_room", (data) => {
-        socket.join(data.roomCode);
+          console.log(`New user joined room: ${data.roomCode}`);
+          socket.join(data.roomCode);
       });
-
+  
       socket.on("chatMessage", (data) => {
-        socket.to(data.roomCode).emit("receive_message", data);
+          socket.to(data.roomCode).emit("receive_message", {
+              sender: data.sender,
+              message: data.message
+          });
+          console.log('Message sent:', data);
       });
-
+  
       socket.on("disconnect", () => {
-        console.log("User disconnected");
+          console.log("User disconnected");
       });
     });
 
