@@ -29,4 +29,11 @@ export class RoomParticipant extends Model {
         field: "joined_at"
     })
     declare joined_at: Date;
+
+    @Column({
+        type: DataType.ENUM('owner', 'participant'),
+        allowNull: false,
+        field: "role"
+    })
+    declare role: string;
 }

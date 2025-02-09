@@ -1,5 +1,5 @@
 import { Room } from "../models/room";
-import { RoomParticipant } from "../models/roomParticipant";
+import { RoomParticipantService } from "./roomParticipantService";
 import { v4 as uuidv4 } from "uuid"; // Install uuid package
 import { User } from "../models/user";
 
@@ -22,9 +22,11 @@ export class RoomService {
             });
 
             // Add the creator as a participant in the room
-            await this.joinRoom(data.userId, newRoom.id);
+            // await this.joinRoom(data.userId, newRoom.id);
 
-            return newRoom;
+            const roomParticipantService = new RoomParticipantService();
+            const newRoomParticipant = roomParticipantService.createParticipant(data.userId, roomLinkCode.roomCode, "owner");
+            return { newRoom, newRoomParticipant};
         } catch (error) {
             console.log("Cannot create room: ",error);
             throw error;
@@ -33,40 +35,8 @@ export class RoomService {
 
     async joinRoom(userId: string, roomId: string) {
         try {
-            const room = await Room.findByPk(roomId);
-            if (!room) {
-                throw new Error("Room not exists");
-            }
-
-            switch (room.status) {
-                case "ready":
-                    throw new Error("Room is full");
-                case "playing":
-                    throw new Error("Room is playing");
-                case "finished":
-                    throw new Error("Room is finished but not eliminated yet");
-            }
-
-            const alreadyParticipant = await RoomParticipant.findOne({
-                where: { user_id: userId, room_id: roomId }
-            });
-
-            if (alreadyParticipant) {
-                throw new Error("User is already a participant in another Room");
-            }
-
-            const newParticipant = await RoomParticipant.create({
-                user_id: userId,
-                room_id: roomId,
-                joined_at: new Date()
-            });
-
-            const participantCount = await RoomParticipant.count({
-                where: {room_id: roomId}
-            })
-            if(participantCount >= room.max_players) {
-                await room.update({ status: "ready" })
-            }
+            const roomParticipantService = new RoomParticipantService();
+            const newParticipant = roomParticipantService.createParticipant(userId, roomId, 'participant')
 
             return newParticipant;
         } catch (error) {

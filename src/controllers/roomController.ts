@@ -15,7 +15,7 @@ export class RoomController {
             const dataFromRoomService = await this.roomService.createRoom({ roomSize, userId });
             res.status(201).json({
                 message: "Room created",
-                data: dataFromRoomService
+                data: dataFromRoomService //This is { newRoom, newParticipant }
             });
         } catch (error) {
             res.status(500).json({message: "Failed to create room"});

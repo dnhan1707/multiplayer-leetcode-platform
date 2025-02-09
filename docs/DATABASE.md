@@ -72,6 +72,7 @@ Junction table tracking which users are in which rooms.
 - `room_id` (UUID, PK, FK): Reference to the room
 - `user_id` (UUID, PK, FK): Reference to the participant
 - `joined_at` (TIMESTAMP): When the user joined the room
+- `role` (ENUM): Owner, Member.
 
 **Relationships:**
 
