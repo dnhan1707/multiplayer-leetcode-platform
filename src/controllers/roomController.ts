@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import { RoomService } from "../services/roomService";
+import { Server } from "socket.io";
 
 export class RoomController {
-    constructor (private roomService: RoomService) {}
+    constructor (private roomService: RoomService, private io: Server) {}
     createRoom = async (req: Request, res: Response) => {
         try {
             if(!req.user) {
@@ -26,6 +27,9 @@ export class RoomController {
         try {
             const roomId = req.params.id; 
             const userId = req.body.userId; 
+            // Emit WebSocket event to notify participants
+            this.io.to(roomId).emit("participantJoined", { userId });
+
             const dataFromRoomService = await this.roomService.joinRoom(userId, roomId)
             res.status(201).json({
                 message: "Join room successfully",

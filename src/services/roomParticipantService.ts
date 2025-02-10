@@ -121,24 +121,39 @@ export class RoomParticipantService {
     }
 
     // Function to get a list of objects that has username and its role
-    async getUsernamesAndRoles(roomId: string) {
+    async getUsersWithRoles(roomCode: string): Promise<{ username: string; role: string }[]> {
         try {
-            const room = await Room.findByPk(roomId);
+            const room = await Room.findOne({where: {room_code: roomCode}})
             if (!room) {
-                throw new Error("Room does not exist");
+                throw new Error(`Room with code ${roomCode} not found.`);
+            
             }
-
+            console.log('Room: ',room);
+            const roomId = room.dataValues.id;
             const participants = await RoomParticipant.findAll({
                 where: { room_id: roomId },
+                include: [
+                  {
+                    model: User,
+                    attributes: ['username'],
+                  },
+              ],
             });
+            console.log('Participants: ',participants);
 
-            if (!participants || participants.length === 0) {
-                throw new Error("No participants found in this room");
-            }
+      
+          // Map the results to the desired format
+          const result = participants.map(participant => ({
+            username: participant.user?.username || 'Unknown',
+            role: participant.role,
+          }));
+          
+          console.log('Result: ',result);
 
-            return participants;
+          return result;
         } catch (error) {
-            throw new Error("Error getting usernames and roles: " + error);
+          console.error('Error fetching users with roles:', error);
+          throw error;
         }
-    }
+      }
 }

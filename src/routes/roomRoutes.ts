@@ -2,10 +2,11 @@ import { Router } from "express";
 import { RoomService } from "../services/roomService";
 import { RoomController } from "../controllers/roomController";
 import authMiddleware from "../middleware/authMiddleware";
+const { io } = require("../index");
 
 const router = Router();
 const roomService = new RoomService();
-const roomController = new RoomController(roomService);
+const roomController = new RoomController(roomService, io);
 
 // Protect only the routes that require authentication
 router.post("/rooms", authMiddleware, roomController.createRoom);
