@@ -1,4 +1,4 @@
-import { Table, Column, Model, DataType, ForeignKey } from "sequelize-typescript";
+import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from "sequelize-typescript";
 import { User } from "./user";
 import { Room } from "./room";
 
@@ -22,6 +22,9 @@ export class RoomParticipant extends Model {
         field: "user_id"
     })
     declare user_id: string;
+
+    @BelongsTo(() => User)
+    declare user: User;  // <-- Add this line to create the association
 
     @Column({
         type: DataType.DATE,

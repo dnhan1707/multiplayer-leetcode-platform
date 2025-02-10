@@ -50,6 +50,8 @@ async function startServer() {
     server.listen(PORT, () => {
       console.log(`Server ready at http://localhost:${PORT}`);
     });
+
+    module.exports.io = io;
   } catch (err) {
     console.log("Failed to start server:", err);
     process.exit(1);

@@ -18,7 +18,7 @@ export class Room extends Model {
     declare id: string;
 
     @Column({
-        type: DataType.STRING(50),
+        type: DataType.TEXT,
         allowNull: false,
         unique: true,
         field: "room_link"
@@ -26,7 +26,7 @@ export class Room extends Model {
     declare room_link: string;
 
     @Column({
-        type: DataType.STRING(50),
+        type: DataType.TEXT,
         defaultValue: "testRoomCode",
         allowNull: false,
         unique: true,

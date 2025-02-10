@@ -23,9 +23,9 @@ export class RoomService {
 
             // Add the creator as a participant in the room
             // await this.joinRoom(data.userId, newRoom.id);
-
+            console.log("new room id: ", newRoom.id);
             const roomParticipantService = new RoomParticipantService();
-            const newRoomParticipant = roomParticipantService.createParticipant(data.userId, roomLinkCode.roomCode, "owner");
+            const newRoomParticipant = roomParticipantService.createParticipant(data.userId, newRoom.id, "owner");
             return { newRoom, newRoomParticipant};
         } catch (error) {
             console.log("Cannot create room: ",error);
@@ -33,14 +33,18 @@ export class RoomService {
         }
     }
 
-    async joinRoom(userId: string, roomId: string) {
+    async joinRoom(userId: string, roomCode: string) {
         try {
+            const room = await Room.findOne({where: {room_code: roomCode}});
+            if (!room) {
+                throw new Error("Room does not exist");
+            }
             const roomParticipantService = new RoomParticipantService();
-            const newParticipant = roomParticipantService.createParticipant(userId, roomId, 'participant')
+            const newParticipant = roomParticipantService.createParticipant(userId, room.id, 'participant')
 
             return newParticipant;
         } catch (error) {
-            console.log(`User ${userId} couldn't join room: ${roomId}`);
+            console.log(`User ${userId} couldn't join room: ${roomCode}`);
             throw error;
         }
     }
@@ -109,7 +113,7 @@ export class RoomService {
         let isUnique = false;
 
         while(!isUnique){
-            roomCode = uuidv4().substring(0, 5).toUpperCase();
+            roomCode = uuidv4();
             isUnique = await this.isRoomCodeUnique(roomCode);
         }
 
@@ -118,6 +122,6 @@ export class RoomService {
 
     private async generateRoomLink() {
         const roomCode = await this.generateUniqueRoomCode();
-        return {roomLink: `http://localhost:4000${roomCode}`, roomCode: roomCode};
+        return {roomLink: `http://localhost:4000/${roomCode}`, roomCode: roomCode};
     }
 }

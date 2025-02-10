@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import { userRoutes } from "./routes/userRoutes";
 import { roomRoutes } from "./routes/roomRoutes";
+import { roomParticipantRoutes } from "./routes/roomParticipantRoutes";
 import { authRoutes } from "./routes/authenticationRoutes";
 import { problemRoutes } from "./routes/problemRoutes";
 import { submissionRoutes } from "./routes/submissionRoutes";
@@ -25,6 +26,9 @@ app.use(authRoutes);
 // Apply protected routes separately
 app.use(userRoutes);
 app.use(roomRoutes);
+app.use(roomRoutes);
+app.use(roomParticipantRoutes);
+
 app.use(problemRoutes);
 app.use(submissionRoutes);
 
