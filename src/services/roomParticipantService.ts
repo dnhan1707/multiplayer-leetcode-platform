@@ -83,8 +83,16 @@ export class RoomParticipantService {
     }
 
     // Update user's role from roomId, userID, userGetChange
-    async updateToOwner(userId: string, roomId: string) {
+    async updateToOwner(userId: string, roomCode: string) {
         try {
+            const room = await Room.findOne({where: {room_code: roomCode}})
+            if (!room) {
+                throw new Error(`Room with code ${roomCode} not found.`);
+            
+            }
+            console.log('Room: ',room);
+            const roomId = room.dataValues.id;
+
             const room = await Room.findByPk(roomId);
             if (!room) {
                 throw new Error("Room does not exist");
