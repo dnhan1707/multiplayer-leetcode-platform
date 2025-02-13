@@ -1,21 +1,24 @@
 import { Router } from "express";
 import { RoomService } from "../services/roomService";
 import { RoomController } from "../controllers/roomController";
+import { Server } from "socket.io";
 import authMiddleware from "../middleware/authMiddleware";
-const { io } = require("../index");
 
-const router = Router();
-const roomService = new RoomService();
-const roomController = new RoomController(roomService, io);
+// Export a function that takes io as a parameter
+export const roomRoutes = (io: Server) => {
+    const router = Router();
+    const roomService = new RoomService();
+    const roomController = new RoomController(roomService, io);
 
-// Protect only the routes that require authentication
-router.post("/rooms", authMiddleware, roomController.createRoom);
-router.put("/rooms/:id", authMiddleware, roomController.updateRoom);
-router.delete("/rooms/:id", authMiddleware, roomController.removeRoom);
+    // Protected routes
+    router.post("/rooms", authMiddleware, roomController.createRoom);
+    router.post("/rooms/:id", authMiddleware, roomController.joinRoom);
+    router.put("/rooms/:id", authMiddleware, roomController.updateRoom);
+    router.delete("/rooms/:id", authMiddleware, roomController.removeRoom);
 
-// Publicly accessible routes
-router.post("/rooms/:id", roomController.joinRoom);
-router.get("/rooms", roomController.getRooms);
-router.get("/rooms/:id", roomController.getRoomById);
+    // Public routes
+    router.get("/rooms", roomController.getRooms);
+    router.get("/rooms/:id", roomController.getRoomById);
 
-export const roomRoutes = router;
+    return router;
+};

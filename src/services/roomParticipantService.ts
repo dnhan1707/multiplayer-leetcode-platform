@@ -93,10 +93,6 @@ export class RoomParticipantService {
             console.log('Room: ',room);
             const roomId = room.dataValues.id;
 
-            const room = await Room.findByPk(roomId);
-            if (!room) {
-                throw new Error("Room does not exist");
-            }
 
             const participants = await RoomParticipant.findAll({
                 where: { room_id: roomId }

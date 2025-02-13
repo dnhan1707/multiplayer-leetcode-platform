@@ -3,7 +3,11 @@ import { RoomService } from "../services/roomService";
 import { Server } from "socket.io";
 
 export class RoomController {
-    constructor (private roomService: RoomService, private io: Server) {}
+    constructor (private roomService: RoomService, private io: Server) {
+        if (!io) {
+            throw new Error('Socket.IO instance is required');
+        }
+    }
     createRoom = async (req: Request, res: Response) => {
         try {
             if(!req.user) {
@@ -25,18 +29,36 @@ export class RoomController {
 
     joinRoom = async (req: Request, res: Response) => {
         try {
-            const roomId = req.params.id; 
-            const userId = req.body.userId; 
+            // Check if user is authenticated
+            if (!req.user) {
+                console.log("Unauthorized: No user found in request");
+                return res.status(401).json({ message: "Unauthorized" });
+            }
+    
+            const roomCode = req.params.id; 
+            const userId = req.user.id;
+            
+            console.log("Attempting to join room with code:", roomCode);
+            console.log("User attempting to join:", userId);
+    
             // Emit WebSocket event to notify participants
-            this.io.to(roomId).emit("participantJoined", { userId });
-
-            const dataFromRoomService = await this.roomService.joinRoom(userId, roomId)
+            if (this.io) {
+                this.io.to(roomCode).emit("participantJoined", { userId });
+            }    
+            const dataFromRoomService = await this.roomService.joinRoom(userId, roomCode);
+            
+            console.log("Successfully joined room. Data:", dataFromRoomService);
+            
             res.status(201).json({
                 message: "Join room successfully",
                 data: dataFromRoomService
-            })
+            });
         } catch (error) {
-            res.status(500).json({message: "Failed to join room"});
+            console.error("Error in joinRoom:", error);
+            res.status(500).json({
+                message: "Failed to join room",
+                error: error
+            });
         }
     }
 
