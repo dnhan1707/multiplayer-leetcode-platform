@@ -167,24 +167,28 @@ export class SubmissionService {
     }    
 
     async validateResult(submission: SubmissionResult) {
+        let passedCases = 0;
+        let failedCases = 0;
         let wrongCase: { case: string; expected: string; received: string }[] = [];
         const submissionsList = submission.submissions;
         submissionsList.forEach((submission) => {
             if (submission.status_id !== 3) {
+                failedCases += 1;
                 wrongCase.push({
                     case: atob(submission.stdin),
                     expected: atob(submission.expected_output),
                     received: atob(submission.stdout)
                 });
+            } else {
+                passedCases += 1; // Only increment passedCases if status_id is 3
             }
         });
 
-        if (wrongCase.length === 0) {
-            return { success: true };
-        }
         return {
-            success: false,
-            wrong_answer: wrongCase
+            success: wrongCase.length === 0,
+            failedCount: failedCases,
+            successCount: passedCases,
+            ...(wrongCase.length > 0 && { wrong_answer: wrongCase })
         };
     }
 }
