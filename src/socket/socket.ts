@@ -29,6 +29,23 @@ export function setupSocket(httpServer: HTTPServer) {
         socket.on("disconnect", () => {
             console.log("Client disconnected");
         });
+
+        socket.on("announceGameStarted", ({ roomCode, selectedProblem }) => {
+            console.log("Game start announced:", { roomCode, selectedProblem }); // Debug log
+            // Broadcast to all users in the room, including sender
+            socket.to(roomCode).emit("announceGameStartedReceived", {
+                roomCode,
+                selectedProblem
+            });
+        });
+
+        socket.on("progress_update", ({ roomCode, progress, username }) => {
+            socket.to(roomCode).emit("progress_update_recieved", {
+                roomCode,
+                progress,
+                username
+            })
+        })
     });
 
     return io;
