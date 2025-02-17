@@ -16,6 +16,8 @@ export function setupSocket(httpServer: HTTPServer) {
         socket.on("join_room", (data) => {
             console.log(`User joined room: ${data.roomCode}`);
             socket.join(data.roomCode);
+            io.to(data.roomCode).emit("participantJoined");
+
         });
 
         socket.on("chatMessage", (data) => {
@@ -27,8 +29,12 @@ export function setupSocket(httpServer: HTTPServer) {
         });
 
         socket.on("disconnect", () => {
-            console.log("Client disconnected");
-        });
+            // Get the rooms this socket was in
+            const rooms = Array.from(socket.rooms);
+            rooms.forEach(room => {
+              io.to(room).emit("participantLeft");
+            });
+          });
 
         socket.on("announceGameStarted", ({ roomCode, selectedProblem }) => {
             console.log("Game start announced:", { roomCode, selectedProblem }); // Debug log
@@ -46,6 +52,18 @@ export function setupSocket(httpServer: HTTPServer) {
                 username
             })
         })
+
+        socket.on("game_lost", ({ roomCode, username }) => {
+            // Broadcast to all users in the room
+            io.to(roomCode).emit("game_lost_announcement", { username });
+        });
+
+        socket.on("game_winner", ({ roomCode, username }) => {
+            // Broadcast to all users in the room
+            io.to(roomCode).emit("game_winner_announcement", { 
+              winner: username 
+            });
+        });
     });
 
     return io;
