@@ -159,5 +159,51 @@ export class RoomParticipantService {
           console.error('Error fetching users with roles:', error);
           throw error;
         }
-      }
+    }
+
+    async deleteRoomParticipant(roomCode: string, userId: string) {
+        try {
+            const room = await Room.findOne({where: { room_code: roomCode }});
+            if (!room) {
+                throw new Error(`Room with code ${roomCode} not found`);
+            }
+
+            const roomId = room.dataValues.id;
+
+            const deletedCount = await RoomParticipant.destroy({
+                where: {
+                    room_id: roomId,
+                    user_id: userId
+                }
+            });
+    
+            if (deletedCount === 0) {
+                throw new Error('Participant not found in this room');
+            }
+
+            const remainingParticipants = await RoomParticipant.count({
+                where: { room_id: roomId }
+            });
+
+            if (remainingParticipants === 0) {
+                await Room.destroy({where: { id: roomId }});
+                return {
+                    success: true,
+                    message: 'Last participant removed and room deleted',
+                    remainingParticipants: 0,
+                    roomDeleted: true
+                };
+            }
+
+            return {
+                success: true,
+                message: 'Participant successfully removed from room',
+                remainingParticipants,
+                roomDeleted: false
+            };
+        } catch (error) {
+            console.error('Error deleting room participant:', error);
+            throw error;
+        }
+    }
 }

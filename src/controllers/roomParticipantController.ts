@@ -21,4 +21,21 @@ export class RoomParticipantController {
             res.status(500).json({message: "Failed to get list of username and roles"});
         }
     }
+
+    deleteParticipantFromRoom = async (req: Request, res: Response) => {
+        try {
+            if(!req.user) {
+                return res.status(401).json({message: "Unauthorized"});
+            }
+
+            const userId = req.user.id;
+            const roomCode = req.params.roomCode;
+            const dataFromRoomService = await this.roomParticipantService.deleteRoomParticipant(roomCode, userId);
+            res.status(200).json({
+                data: dataFromRoomService
+            })
+        } catch (error) {
+            res.status(500).json({message: "Failed to delete participant from room"});
+        }
+    }
 }
