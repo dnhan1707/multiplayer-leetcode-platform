@@ -3,6 +3,7 @@ import { sequelize, testConnection } from "./config/database";
 import { createServer } from "http";
 import { setupSocket } from "./socket/socket";
 import { roomRoutes } from "./routes/roomRoutes";
+import { roomParticipantRoutes } from "./routes/roomParticipantRoutes";
 
 async function startServer() {
     try {
@@ -16,6 +17,7 @@ async function startServer() {
 
         // Setup routes with io instance
         app.use('/', roomRoutes(io));
+        app.use('/', roomParticipantRoutes(io));
 
         // Database connection
         await sequelize.sync();

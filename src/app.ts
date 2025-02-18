@@ -25,7 +25,6 @@ app.use(authRoutes);
 
 // Apply protected routes separately
 app.use(userRoutes);
-app.use(roomParticipantRoutes);
 
 app.use(problemRoutes);
 app.use(submissionRoutes);

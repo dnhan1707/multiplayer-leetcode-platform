@@ -1,8 +1,13 @@
 import { Response, Request } from "express";
 import { RoomParticipantService } from "../services/roomParticipantService";
+import { Server } from "socket.io";
 
 export class RoomParticipantController {
-    constructor (private roomParticipantService: RoomParticipantService){}
+    constructor (private roomParticipantService: RoomParticipantService, private io: Server){
+        if (!io) {
+            throw new Error('Socket.IO instance is required');
+        }
+    }
 
     getUserNameWithRole = async (req: Request, res: Response) => {
         try {
@@ -31,6 +36,7 @@ export class RoomParticipantController {
             const userId = req.user.id;
             const roomCode = req.params.roomCode;
             const dataFromRoomService = await this.roomParticipantService.deleteRoomParticipant(roomCode, userId);
+            this.io.to(roomCode).emit("participantLeft");
             res.status(200).json({
                 data: dataFromRoomService
             })

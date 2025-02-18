@@ -19,7 +19,7 @@ export class RoomParticipantService {
 
             switch (room.status) {
                 case RoomStatus.Ready:
-                    throw new Error("Room is full");
+                    return {isFull: true};
                 case RoomStatus.Playing:
                     throw new Error("Room is playing");
                 case RoomStatus.Finished:
@@ -38,7 +38,8 @@ export class RoomParticipantService {
                 user_id: userId,
                 room_id: roomId,
                 joined_at: new Date(),
-                role: role
+                role: role,
+                isFull: false
             });
 
             const participantCount = await RoomParticipant.count({
